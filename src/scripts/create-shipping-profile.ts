@@ -22,7 +22,7 @@ export default async function createShippingProfile({ container }: ExecArgs) {
           type: "gift_card",
         }
       ]);
-      logger.info("Created shipping profiles:", profiles);
+      logger.info(`Created shipping profiles: ${JSON.stringify(profiles, null, 2)}`);
     } else {
       logger.info("Existing shipping profiles:");
       existingProfiles.forEach(profile => {

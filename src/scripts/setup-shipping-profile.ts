@@ -9,7 +9,7 @@ export default async function setupShippingProfile({ container }: ExecArgs) {
   try {
     // Check existing shipping profiles
     const profiles = await fulfillmentModuleService.listShippingProfiles({});
-    logger.info("Current shipping profiles:", profiles);
+    logger.info(`Current shipping profiles: ${JSON.stringify(profiles, null, 2)}`);
 
     if (!profiles || profiles.length === 0) {
       logger.info("Creating default shipping profile...");
@@ -23,7 +23,7 @@ export default async function setupShippingProfile({ container }: ExecArgs) {
           ],
         },
       });
-      logger.info("Created shipping profile:", result[0]);
+      logger.info(`Created shipping profile: ${JSON.stringify(result[0], null, 2)}`);
     } else {
       logger.info("Default shipping profile already exists");
     }

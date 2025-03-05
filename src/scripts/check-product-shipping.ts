@@ -12,7 +12,7 @@ export default async function checkProductShipping({ container }: ExecArgs) {
       `SELECT id, name, type, created_at, updated_at 
        FROM shipping_profile`
     );
-    logger.info("Found shipping profiles in database:", profiles);
+    logger.info(`Found shipping profiles in database: ${JSON.stringify(profiles, null, 2)}`);
 
     logger.info("\nChecking products with shipping profiles...");
     const productsWithProfiles = await database.query(
@@ -22,7 +22,7 @@ export default async function checkProductShipping({ container }: ExecArgs) {
        LIMIT 5`
     );
     
-    logger.info("Products with shipping profiles:", productsWithProfiles);
+    logger.info(`Products with shipping profiles: ${JSON.stringify(productsWithProfiles, null, 2)}`);
 
   } catch (error) {
     logger.error("Database error:", error);

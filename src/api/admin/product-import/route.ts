@@ -1,11 +1,10 @@
 import { Request, Response } from "express"
-import { MedusaRequest } from "@medusajs/medusa"
+import { MedusaRequest } from "@medusajs/framework/http"
+import { MedusaContainer } from "@medusajs/medusa"
 import fs from "fs"
 
-export interface ExtendedRequest extends MedusaRequest {
-  scope: {
-    resolve<T>(name: string): T
-  }
+export type ExtendedRequest = MedusaRequest & {
+  scope: MedusaContainer
 }
 
 export const POST = async (req: ExtendedRequest, res: Response) => {
@@ -18,10 +17,10 @@ export const POST = async (req: ExtendedRequest, res: Response) => {
       "productCollectionService",
       "productTypeService",
       "productVariantInventoryService"
-    ]
+    ] as const
 
-    const availableServices = []
-    const serviceInfo = {}
+    const availableServices: string[] = []
+    const serviceInfo: Record<string, { methods: string[], type: string }> = {}
 
     // Try to resolve each service and get its methods
     for (const serviceName of services) {

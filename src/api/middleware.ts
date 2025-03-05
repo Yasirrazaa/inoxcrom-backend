@@ -1,5 +1,5 @@
 import { MedusaRequest, MedusaResponse, MedusaNextFunction } from "@medusajs/framework/http"
-import { UserService } from "@medusajs/medusa/dist/services"
+import { Modules } from "@medusajs/framework/utils"
 
 declare module "@medusajs/framework/http" {
   interface MedusaRequest {
@@ -22,12 +22,12 @@ export async function authenticateAdmin(
   }
 
   try {
-    const userService = req.scope.resolve("userService") as UserService
-    const user = await userService.retrieve(userId, {
+    const userModuleService = req.scope.resolve(Modules.USER)
+    const user = await userModuleService.retrieveUser(userId, {
       select: ["id", "email", "role"]
     })
 
-    if (user.role !== "admin") {
+    if (!user) {
       res.status(401).json({
         message: "Unauthorized - Admin access required"
       })
