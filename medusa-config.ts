@@ -13,28 +13,17 @@ module.exports = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
   },
-  modules: [
+  modules: [],
+  plugins: [
     {
-      resolve: "@medusajs/medusa/payment",
+      resolve: `medusa-payment-stripe`,
       options: {
-        providers: [
-          {
-            resolve: "@medusajs/medusa/payment-stripe",
-            id: "stripe",
-            options: {
-              apiKey: process.env.STRIPE_API_KEY,
-              webhookSecret: process.env.STRIPE_WEBHOOK_SECRET,
-              // Enable automatic payment methods
-              automatic_payment_methods: true,
-              // Enable capture
-              capture: true,
-              // Default payment description
-              payment_description: "Inoxcrom Store Purchase"
-            },
-          },
-        ],
+        api_key: process.env.STRIPE_API_KEY,
+        webhook_secret: process.env.STRIPE_WEBHOOK_SECRET,
+        automatic_payment_methods: true,
+        capture: true,
+        payment_description: "Inoxcrom Store Purchase"
       },
     },
-  ],
-  plugins: []
+  ]
 })
