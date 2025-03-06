@@ -19,14 +19,7 @@ module.exports = defineConfig({
     }
   },
   modules: [ 
-    {
-      resolve: "@medusajs/admin",
-      /** @type {import('@medusajs/admin').PluginOptions} */
-      options: {
-        autoRebuild: true,
-        // other options...
-      },
-    },
+
     {
     resolve: "@medusajs/medusa/cache-redis",
     options: {
