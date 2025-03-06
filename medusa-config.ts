@@ -4,6 +4,9 @@ loadEnv(process.env.NODE_ENV || 'production', process.cwd())
 
 module.exports = defineConfig({
   projectConfig: {
+    admin: {
+    backendUrl: process.env.BACKEND_URL,
+   },
     workerMode: process.env.MEDUSA_WORKER_MODE as "shared" | "worker" | "server",
     admin: {
       disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
