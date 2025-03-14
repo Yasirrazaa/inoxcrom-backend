@@ -105,14 +105,15 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
       from: this.options.from,
       to: [notification.to],
       subject: this.getTemplateSubject(notification.template as Templates),
-      html: ""
+      text: "", // Fallback plain text content
+      html: undefined
     }
 
     if (typeof template === "string") {
       emailOptions.html = template
     } else {
       emailOptions.react = template(notification.data)
-      delete emailOptions.html
+      emailOptions.html = undefined
     }
 
     const { data, error } = await this.resendClient.emails.send(emailOptions)
@@ -122,7 +123,7 @@ class ResendNotificationProviderService extends AbstractNotificationProviderServ
       return {}
     }
 
-    return { id: data.id }
+    return data ? { id: data.id } : {}
   }
 }
 

@@ -29,7 +29,7 @@ function OrderPlacedEmailComponent({ order }: OrderPlacedEmailProps) {
       <Heading>Thank you for your order</Heading>
       {order.email}'s Items
       <Container>
-        {order.items.map(item => {
+        {order.items?.map(item => {
           return (
             <Section
               key={item.id}
@@ -38,8 +38,8 @@ function OrderPlacedEmailComponent({ order }: OrderPlacedEmailProps) {
               <Row>
                 <Column>
                   <Img
-                    src={item.thumbnail}
-                    alt={item.product_title}
+                    src={item.thumbnail || ''}
+                    alt={item.product_title || 'Product image'}
                     style={{ float: "left" }}
                     width="260px"
                   />
