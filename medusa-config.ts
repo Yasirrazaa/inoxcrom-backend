@@ -22,28 +22,28 @@ module.exports = defineConfig({
     disable: process.env.DISABLE_MEDUSA_ADMIN === "true"
   },
   modules: [
-    {
-      resolve: "@medusajs/medusa/file",
-      options: {
-        providers: [
-          {
-            resolve: "@medusajs/medusa/file-s3",
-            id: "s3",
-            options: {
-              file_url: process.env.MINIO_FILE_ENDPOINT,
-              access_key_id: process.env.MINIO_ACCESS_KEY,
-              secret_access_key: process.env.MINIO_SECRET_KEY,
-              region: process.env.MINIO_REGION,
-              bucket: process.env.MINIO_BUCKET,
-              endpoint: process.env.MINIO_ENDPOINT,
-              additional_client_config: {
-                forcePathStyle: true
-              }
-            }
-          }
-        ]
-      }
-    },
+    // {
+    //   resolve: "@medusajs/medusa/file",
+    //   options: {
+    //     providers: [
+    //       {
+    //         resolve: "@medusajs/medusa/file-s3",
+    //         id: "s3",
+    //         options: {
+    //           file_url: process.env.MINIO_FILE_ENDPOINT,
+    //           access_key_id: process.env.MINIO_ACCESS_KEY,
+    //           secret_access_key: process.env.MINIO_SECRET_KEY,
+    //           region: process.env.MINIO_REGION,
+    //           bucket: process.env.MINIO_BUCKET,
+    //           endpoint: process.env.MINIO_ENDPOINT,
+    //           additional_client_config: {
+    //             forcePathStyle: true
+    //           }
+    //         }
+    //       }
+    //     ]
+    //   }
+    // },
     {
       resolve: "@medusajs/medusa/payment",
       options: {
@@ -96,6 +96,16 @@ module.exports = defineConfig({
     }
   ],
   plugins: [
+      {
+    resolve: `medusa-file-minio`,
+    options: {
+        endpoint: process.env.MINIO_ENDPOINT,
+        bucket: process.env.MINIO_BUCKET,
+        access_key_id: process.env.MINIO_ACCESS_KEY,
+        secret_access_key: process.env.MINIO_SECRET_KEY,
+        private_bucket: process.env.MINIO_PRIVATE_BUCKET,
+    },
+  },
     {
       resolve: `medusa-payment-stripe`,
       options: {
