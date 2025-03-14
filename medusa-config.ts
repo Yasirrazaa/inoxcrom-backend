@@ -18,15 +18,63 @@ module.exports = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
   },
-  modules: [ 
-    {
-      resolve: "@medusajs/admin",
-      /** @type {import('@medusajs/admin').PluginOptions} */
+  modules: [
+
+  {
+      resolve: "@medusajs/medusa/file",
       options: {
-        autoRebuild: true,
-        // other options...
+        providers: [
+          {
+            resolve: "@medusajs/medusa/file-s3",
+            id: "s3",
+            options: {
+              file_url: "https://console-production-0df1.up.railway.apprailway/inoxcrom-bucket", // Adjust based on your MinIO URL and bucket
+              access_key_id: process.env.S3_ACCESS_KEY_ID, // Set this in your environment
+              secret_access_key: process.env.S3_SECRET_ACCESS_KEY, // Set this in your environment
+              region: "us-east-1", // Default for MinIO
+              bucket: "inoxcrom-bucket", // Your created bucket name
+              endpoint: "https://console-production-0df1.up.railway.app", // Updated URL for your MinIO server
+              additional_client_config: {
+                forcePathStyle: true // Important for MinIO
+              },
+            },
+          },
+        ],
       },
     },
+
+    {
+      resolve: "@medusajs/medusa/payment",
+      options: {
+        providers: [
+          {
+            resolve: "@medusajs/medusa/payment-stripe",
+            id: "stripe",
+            options: {
+              apiKey: process.env.STRIPE_API_KEY,
+            },
+          },
+        ],
+      },
+    },
+
+    {
+      resolve: "@medusajs/medusa/notification",
+      options: {
+        providers: [
+          {
+            resolve: "./src/modules/resend",
+            id: "resend",
+            options: {
+              channels: ["email"],
+              api_key: process.env.RESEND_API_KEY,
+              from: process.env.RESEND_FROM_EMAIL,
+            },
+          },
+        ],
+      },
+    },
+
     {
     resolve: "@medusajs/medusa/cache-redis",
     options: {
@@ -49,6 +97,16 @@ module.exports = defineConfig({
   },
 ],
   plugins: [
+    // {
+    //   resolve: "medusa-file-minio",
+    //   options: {
+    //     endpoint: process.env.MINIO_ENDPOINT,
+    //     bucket: process.env.MINIO_BUCKET,
+    //     access_key_id: process.env.MINIO_ACCESS_KEY,
+    //     secret_access_key: process.env.MINIO_SECRET_KEY,
+    //     private_bucket: process.env.MINIO_PRIVATE_BUCKET,
+    //   },
+    // },
     {
       resolve: `medusa-payment-stripe`,
       options: {
