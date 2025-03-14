@@ -5,9 +5,7 @@ loadEnv(process.env.NODE_ENV || 'production', process.cwd())
 module.exports = defineConfig({
   projectConfig: {
     workerMode: process.env.MEDUSA_WORKER_MODE as "shared" | "worker" | "server",
-    admin: {
-      disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
-    },
+
     databaseUrl: process.env.DATABASE_URL,
     redisUrl: process.env.REDIS_URL,
     http: {
@@ -18,6 +16,9 @@ module.exports = defineConfig({
       cookieSecret: process.env.COOKIE_SECRET || "supersecret",
     }
   },
+  admin: {
+    backendUrl: process.env.BACKEND_URL,
+    disable: process.env.DISABLE_MEDUSA_ADMIN === "true",
   modules: [
 
   {
