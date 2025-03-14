@@ -28,12 +28,12 @@ module.exports = defineConfig({
             resolve: "@medusajs/medusa/file-s3",
             id: "s3",
             options: {
-              file_url: "https://console-production-0df1.up.railway.apprailway/inoxcrom-bucket", // Adjust based on your MinIO URL and bucket
-              access_key_id: process.env.S3_ACCESS_KEY_ID, // Set this in your environment
-              secret_access_key: process.env.S3_SECRET_ACCESS_KEY, // Set this in your environment
-              region: "us-east-1", // Default for MinIO
-              bucket: "inoxcrom-bucket", // Your created bucket name
-              endpoint: "https://console-production-0df1.up.railway.app", // Updated URL for your MinIO server
+              file_url: process.env.MINIO_FILE_ENDPOINT, // Adjust based on your MinIO URL and bucket
+              access_key_id: process.env.MINIO_ACCESS_KEY, // Set this in your environment
+              secret_access_key: process.env.MINIO_SECRET_KEY, // Set this in your environment
+              region: process.env.MINIO_REGION, // Set this in your environment
+              bucket: process.env.MINIO_BUCKET, // Your created bucket name
+              endpoint: process.env.MINIO_ENDPOINT, // Updated URL for your MinIO server
               additional_client_config: {
                 forcePathStyle: true // Important for MinIO
               },
