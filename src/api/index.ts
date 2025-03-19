@@ -10,21 +10,46 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: {
-    secure: false, // Allow non-HTTPS for local development
+    secure: process.env.NODE_ENV === 'production', // Use secure in production
     httpOnly: true,
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
-    sameSite: 'lax'
+    sameSite: 'none', // Required for cross-site cookie
+    domain: 'inoxcrom.au' // Allow sharing across railway subdomains
   }
 }))
 
 // CORS configuration
-const storeCors = process.env.STORE_CORS || "http://localhost:8000"
-const adminCors = process.env.ADMIN_CORS || "http://localhost:7000,http://localhost:7001"
-
-app.use(cors({
-  origin: [...storeCors.split(','), ...adminCors.split(',')],
+const corsOptions = {
+  origin: function(origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+    const allowedOrigins = [
+      "https://store.inoxcrom.au",
+      "https://admin.inoxcrom.au",
+      "https://inoxcrom.au",
+      "http://localhost:8000",
+      "http://localhost:7000"
+    ]
+    
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true,
-}))
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+  allowedHeaders: [
+    'Content-Type',
+    'Authorization',
+    'x-publishable-api-key',
+    'Accept'
+  ],
+  exposedHeaders: ['set-cookie']
+}
+
+app.use(cors(corsOptions))
+
+// Enable preflight for all routes
+app.options('*', cors(corsOptions))
 
 // Body parsing
 app.use(express.json())
